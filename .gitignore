@@ -1,0 +1,18 @@
+# Xcode
+build/
+DerivedData/
+*.xcuserstate
+*.xcscmblueprint
+*.xccheckout
+*.xcuserdatad
+*.moved-aside
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+
+# macOS
+.DS_Store
+
+# SwiftPM
+.build/
