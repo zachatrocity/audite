@@ -21,8 +21,9 @@ final class StatusBarController {
         }
 
         let menu = NSMenu()
-        menu.addItem(NSMenuItem(title: "Quit Audite", action: #selector(quit), keyEquivalent: "q"))
-        statusItem.menu = nil
+        let quitItem = NSMenuItem(title: "Quit Audite", action: #selector(quit), keyEquivalent: "q")
+        quitItem.target = self
+        menu.addItem(quitItem)
         self.contextMenu = menu
 
         popover.contentSize = NSSize(width: 320, height: 280)
