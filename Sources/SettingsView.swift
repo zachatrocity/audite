@@ -6,6 +6,7 @@ struct SettingsView: View {
     @AppStorage("audioFolder") private var audioFolder: String = ""
     @AppStorage("outputFolder") private var outputFolder: String = ""
     @AppStorage("filenameTemplate") private var filenameTemplate: String = "{{date}} {{title}}"
+    @AppStorage("includeTime") private var includeTime: Bool = false
 
     var body: some View {
         ScrollView {
@@ -144,6 +145,11 @@ struct SettingsView: View {
                 .textFieldStyle(.roundedBorder)
                 .controlSize(.small)
 
+            Toggle("Include time in {{date}}", isOn: $includeTime)
+                .toggleStyle(.checkbox)
+                .font(.caption2)
+                .foregroundColor(.secondary)
+
             Text("Tokens: {{date}}, {{title}} — used for both audio and transcript files.")
                 .font(.caption2)
                 .foregroundColor(.secondary)
@@ -178,7 +184,7 @@ struct SettingsView: View {
 
     private func previewFilename() -> String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd HHmmss"
+        formatter.dateFormat = includeTime ? "yyyy-MM-dd HHmmss" : "yyyy-MM-dd"
         return filenameTemplate
             .replacingOccurrences(of: "{{date}}", with: formatter.string(from: Date()))
             .replacingOccurrences(of: "{{title}}", with: "Recording")

@@ -76,13 +76,17 @@ final class AudioRecorder {
 
         try FileManager.default.createDirectory(at: baseURL, withIntermediateDirectories: true)
 
+        let includeTime = defaults.bool(forKey: "includeTime")
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd HHmmss"
+        formatter.dateFormat = includeTime ? "yyyy-MM-dd HHmmss" : "yyyy-MM-dd"
         let dateString = formatter.string(from: Date())
+        let resolvedTitle = title.isEmpty ? "Recording" : title
+        let titleHasDate = resolvedTitle.hasPrefix(dateString)
 
         var filename = filenameTemplate
-            .replacingOccurrences(of: "{{date}}", with: dateString)
-            .replacingOccurrences(of: "{{title}}", with: title.isEmpty ? "Recording" : title)
+            .replacingOccurrences(of: "{{date}}", with: titleHasDate ? "" : dateString)
+            .replacingOccurrences(of: "{{title}}", with: resolvedTitle)
+            .trimmingCharacters(in: .whitespaces)
 
         filename = filename
             .replacingOccurrences(of: "/", with: "-")

@@ -52,6 +52,8 @@ struct PopoverView: View {
 
     @ViewBuilder
     private var mainContent: some View {
+        ScrollView {
+        VStack(spacing: 12) {
         HStack(spacing: 8) {
             if appState.isRecording {
                 Circle()
@@ -169,21 +171,36 @@ struct PopoverView: View {
         }
 
         if let savedURL = appState.lastSavedURL {
-            Button {
-                NSWorkspace.shared.open(savedURL)
-            } label: {
-                HStack(spacing: 4) {
-                    Image(systemName: "doc.text")
-                    Text("Open in Obsidian")
-                    Spacer()
-                    Text(savedURL.deletingPathExtension().lastPathComponent)
-                        .lineLimit(1)
-                        .truncationMode(.middle)
-                        .foregroundColor(.secondary)
+            HStack(spacing: 4) {
+                Button {
+                    NSWorkspace.shared.open(savedURL)
+                } label: {
+                    HStack(spacing: 4) {
+                        Image(systemName: "doc.text")
+                        Text("Open in Obsidian")
+                    }
+                    .font(.caption)
                 }
-                .font(.caption)
+                .buttonStyle(.link)
+
+                Spacer()
+
+                Text(savedURL.deletingPathExtension().lastPathComponent)
+                    .lineLimit(1)
+                    .truncationMode(.middle)
+                    .foregroundColor(.secondary)
+                    .font(.caption)
+
+                Button {
+                    appState.lastSavedURL = nil
+                    appState.lastTranscript = nil
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundColor(.secondary)
+                        .font(.caption)
+                }
+                .buttonStyle(.plain)
             }
-            .buttonStyle(.link)
         }
 
         Button {
@@ -198,6 +215,8 @@ struct PopoverView: View {
         .controlSize(.large)
         .keyboardShortcut(.space, modifiers: [])
         .disabled(appState.isTranscribing || appState.transcription.modelState != .ready)
+        } // VStack
+        } // ScrollView
     }
 
     // MARK: - Settings

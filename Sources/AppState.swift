@@ -73,16 +73,22 @@ final class AppState: ObservableObject {
             baseURL = URL(fileURLWithPath: outputFolder, isDirectory: true)
         }
 
+        let includeTime = defaults.bool(forKey: "includeTime")
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd HHmmss"
+        formatter.dateFormat = includeTime ? "yyyy-MM-dd HHmmss" : "yyyy-MM-dd"
         let dateString = formatter.string(from: Date())
 
         let isoFormatter = ISO8601DateFormatter()
         let isoDate = isoFormatter.string(from: Date())
 
+        // If the title already starts with today's date (e.g. from "Prepend date"),
+        // skip the {{date}} token to avoid duplication.
+        let titleHasDate = title.hasPrefix(dateString)
+
         var filename = filenameTemplate
-            .replacingOccurrences(of: "{{date}}", with: dateString)
+            .replacingOccurrences(of: "{{date}}", with: titleHasDate ? "" : dateString)
             .replacingOccurrences(of: "{{title}}", with: title)
+            .trimmingCharacters(in: .whitespaces)
             .replacingOccurrences(of: "/", with: "-")
             .replacingOccurrences(of: ":", with: "-")
 
