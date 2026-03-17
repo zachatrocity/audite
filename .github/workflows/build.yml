@@ -9,24 +9,34 @@ on:
 
 jobs:
   build:
-    runs-on: macos-14
+    runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
 
-      - name: Select latest Xcode
+      - name: Select Xcode 16
         run: |
-          XCODE_APP=$(ls /Applications | grep -E '^Xcode_.*\.app$' | sort -V | tail -1)
-          echo "Using $XCODE_APP"
-          sudo xcode-select -s "/Applications/$XCODE_APP/Contents/Developer"
+          XCODE_PATH=$(ls -d /Applications/Xcode_16*.app 2>/dev/null | sort -V | tail -1)
+          if [ -z "$XCODE_PATH" ]; then
+            XCODE_PATH=$(ls -d /Applications/Xcode*.app 2>/dev/null | sort -V | tail -1)
+          fi
+          echo "Using $XCODE_PATH"
+          sudo xcode-select -s "$XCODE_PATH/Contents/Developer"
+          xcodebuild -version
 
       - name: Install XcodeGen
-      # XcodeGen is required to generate the .xcodeproj from project.yml
         run: brew install xcodegen
 
       - name: Generate Xcode Project
         run: |
           rm -rf Audite.xcodeproj
           xcodegen generate
+
+      - name: Resolve Dependencies
+        run: |
+          xcodebuild \
+            -scheme Audite \
+            -derivedDataPath build \
+            -resolvePackageDependencies
 
       - name: Build (Release)
         run: |
