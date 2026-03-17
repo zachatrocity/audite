@@ -13,6 +13,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Select latest Xcode
+        run: |
+          XCODE_APP=$(ls /Applications | grep -E '^Xcode_.*\.app$' | sort -V | tail -1)
+          echo "Using $XCODE_APP"
+          sudo xcode-select -s "/Applications/$XCODE_APP/Contents/Developer"
+
       - name: Install XcodeGen
       # XcodeGen is required to generate the .xcodeproj from project.yml
         run: brew install xcodegen
