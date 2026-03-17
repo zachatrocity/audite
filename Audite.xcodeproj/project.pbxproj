@@ -205,6 +205,9 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Audite;
 				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Audite needs access to the microphone for recording.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Audite uses speech recognition to transcribe recordings.";
+				INFOPLIST_KEY_NSCalendarsUsageDescription = "Audite can read Calendar events to name recordings.";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 0.1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -268,6 +271,9 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Audite;
 				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Audite needs access to the microphone for recording.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Audite uses speech recognition to transcribe recordings.";
+				INFOPLIST_KEY_NSCalendarsUsageDescription = "Audite can read Calendar events to name recordings.";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 0.1.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
