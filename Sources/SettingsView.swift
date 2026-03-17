@@ -8,14 +8,16 @@ struct SettingsView: View {
     @AppStorage("filenameTemplate") private var filenameTemplate: String = "{{date}} {{title}}"
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            modelSection
-            Divider()
-            audioFolderSection
-            Divider()
-            obsidianFolderSection
-            Divider()
-            filenameSection
+        ScrollView {
+            VStack(alignment: .leading, spacing: 12) {
+                modelSection
+                Divider()
+                audioFolderSection
+                Divider()
+                obsidianFolderSection
+                Divider()
+                filenameSection
+            }
         }
     }
 
