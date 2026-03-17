@@ -13,6 +13,9 @@ settings:
     GENERATE_INFOPLIST_FILE: YES
     INFOPLIST_KEY_CFBundleDisplayName: Audite
     INFOPLIST_KEY_LSUIElement: YES
+    INFOPLIST_KEY_NSMicrophoneUsageDescription: "Audite needs access to the microphone for recording."
+    INFOPLIST_KEY_NSSpeechRecognitionUsageDescription: "Audite uses speech recognition to transcribe recordings."
+    INFOPLIST_KEY_NSCalendarsUsageDescription: "Audite can read Calendar events to name recordings."
     SWIFT_VERSION: 5.0
 
 packages: {}
