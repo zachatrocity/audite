@@ -16,6 +16,7 @@
 		418DDB60CA712BD88D1067C5 /* PopoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F729AFC68999827A3AA1C0C3 /* PopoverView.swift */; };
 		4CF6508F978CEBC40CE2775B /* CalendarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7A0940DEAA6B567C6B61BE /* CalendarManager.swift */; };
 		9C1CBE4F2CAE3F0CDAD9B251 /* StatusBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6DB2B36DE2097C2EC54017 /* StatusBarController.swift */; };
+		B3B9FE1B32C246DEC22EA3D0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F50E1523501CB4A7E89D9E79 /* Assets.xcassets */; };
 		C32D94FC81D603CD33C7F27B /* FluidAudio in Frameworks */ = {isa = PBXBuildFile; productRef = 8605877ED77AC3890ACA2B71 /* FluidAudio */; };
 /* End PBXBuildFile section */
 
@@ -29,6 +30,7 @@
 		7A6DB2B36DE2097C2EC54017 /* StatusBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarController.swift; sourceTree = "<group>"; };
 		98DD295249791375E3A9555F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B0F5657D9C514697AD768047 /* Audite.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Audite.entitlements; sourceTree = "<group>"; };
+		F50E1523501CB4A7E89D9E79 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F729AFC68999827A3AA1C0C3 /* PopoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverView.swift; sourceTree = "<group>"; };
 		FDC4B126AD8F90B2C34CA8FC /* AudioRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorder.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -50,6 +52,7 @@
 			children = (
 				98DD295249791375E3A9555F /* AppDelegate.swift */,
 				4DFD9C5911ECAD68C337FDD5 /* AppState.swift */,
+				F50E1523501CB4A7E89D9E79 /* Assets.xcassets */,
 				FDC4B126AD8F90B2C34CA8FC /* AudioRecorder.swift */,
 				B0F5657D9C514697AD768047 /* Audite.entitlements */,
 				7970F93490A0E6FA504814F3 /* AuditeApp.swift */,
@@ -86,6 +89,7 @@
 			buildConfigurationList = C240C23EB57126A080D26BB0 /* Build configuration list for PBXNativeTarget "Audite" */;
 			buildPhases = (
 				0CB8DC634D023C4D0556F906 /* Sources */,
+				250616FD2ADFD7CFFA8B19EC /* Resources */,
 				E1B8AAE1528EB0E3ADE3D90B /* Frameworks */,
 			);
 			buildRules = (
@@ -135,6 +139,17 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		250616FD2ADFD7CFFA8B19EC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B3B9FE1B32C246DEC22EA3D0 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		0CB8DC634D023C4D0556F906 /* Sources */ = {
@@ -250,7 +265,7 @@
 				INFOPLIST_KEY_NSCalendarsUsageDescription = "Audite can read Calendar events to name recordings.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Audite needs access to the microphone for recording.";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 0.0.1;
+				MARKETING_VERSION = 0.0.2;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -315,7 +330,7 @@
 				INFOPLIST_KEY_NSCalendarsUsageDescription = "Audite can read Calendar events to name recordings.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Audite needs access to the microphone for recording.";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 0.0.1;
+				MARKETING_VERSION = 0.0.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.zachatrocity.audite;

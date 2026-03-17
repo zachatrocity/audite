@@ -6,6 +6,7 @@ import Combine
 final class StatusBarController {
     private let statusItem: NSStatusItem
     private let popover: NSPopover
+    private var contextMenu: NSMenu?
     private var cancellables: Set<AnyCancellable> = []
 
     init(_ appState: AppState) {
@@ -16,7 +17,13 @@ final class StatusBarController {
             button.image = NSImage(systemSymbolName: "waveform.circle", accessibilityDescription: "Audite")
             button.action = #selector(togglePopover(_:))
             button.target = self
+            button.sendAction(on: [.leftMouseUp, .rightMouseUp])
         }
+
+        let menu = NSMenu()
+        menu.addItem(NSMenuItem(title: "Quit Audite", action: #selector(quit), keyEquivalent: "q"))
+        statusItem.menu = nil
+        self.contextMenu = menu
 
         popover.contentSize = NSSize(width: 320, height: 280)
         popover.behavior = .transient
@@ -42,11 +49,24 @@ final class StatusBarController {
 
     @objc private func togglePopover(_ sender: Any?) {
         guard let button = statusItem.button else { return }
+        let event = NSApp.currentEvent
+
+        if event?.type == .rightMouseUp {
+            popover.performClose(sender)
+            statusItem.menu = contextMenu
+            button.performClick(nil)
+            statusItem.menu = nil
+            return
+        }
 
         if popover.isShown {
             popover.performClose(sender)
         } else {
             popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
         }
+    }
+
+    @objc private func quit() {
+        NSApp.terminate(nil)
     }
 }
