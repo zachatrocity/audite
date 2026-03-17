@@ -8,6 +8,13 @@ struct PopoverView: View {
             Text(appState.isRecording ? "Recording…" : "Idle")
                 .font(.headline)
 
+            if let error = appState.lastError {
+                Text(error)
+                    .font(.caption)
+                    .foregroundColor(.red)
+                    .multilineTextAlignment(.center)
+            }
+
             Button(appState.isRecording ? "Stop" : "Start") {
                 appState.toggleRecording()
             }
