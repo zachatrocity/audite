@@ -3,14 +3,14 @@
 Goal: get Audite to a fully functional menu‑bar recorder + transcription app.
 
 ## Active
-- [ ] **Audio capture pipeline** (AVAudioEngine + file writer)
+- [x] **Audio capture pipeline** (AVAudioEngine + file writer)
 - [ ] **Transcription engine** (Speech framework or Whisper) + live/after‑recording flow
 - [ ] **Output formatting & saving** (folder selection + filename template)
+- [ ] **Settings UX** (folder picker, template preview, validation)
 
 ## Ready
 - [ ] **Permissions flow** (microphone + speech recognition)
 - [ ] **Calendar integration** (use current event for title/context)
-- [ ] **Settings UX** (folder picker, template preview, validation)
 - [ ] **Status UI polish** (recording timer, waveform, error states)
 
 ## Later
@@ -21,3 +21,4 @@ Goal: get Audite to a fully functional menu‑bar recorder + transcription app.
 
 ## Done
 - [x] Project scaffold (menu bar app + popover + settings)
+- [x] Audio capture pipeline (writes CAF files)
