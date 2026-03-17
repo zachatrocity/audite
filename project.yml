@@ -4,6 +4,7 @@ options:
   deploymentTarget:
     macOS: '13.0'
   xcodeVersion: '15.4'
+  projectFormat: '15.4'
 settings:
   base:
     PRODUCT_BUNDLE_IDENTIFIER: com.zachatrocity.audite
