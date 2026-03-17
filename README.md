@@ -50,10 +50,11 @@ open build/Build/Products/Debug/Audite.app
 5. Hit **Start Recording** — hit **Stop Recording** when done
 6. The transcript saves automatically as a Markdown note
 
-<p align="center">
-  Built with vibes 🤙 forever local and unshitified
-</p>
-
 ## License
 
 MIT
+
+
+<p align="center">
+  Built with vibes 🤙 forever local and unshitified
+</p>
