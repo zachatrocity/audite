@@ -1,12 +1,16 @@
 import EventKit
 import Foundation
 
+private final class SendableEventStore: @unchecked Sendable {
+    let store = EKEventStore()
+}
+
 @MainActor
 final class CalendarManager: ObservableObject {
     @Published var upcomingEvents: [CalendarEvent] = []
     @Published var accessGranted: Bool = false
 
-    private let store = EKEventStore()
+    private let eventStore = SendableEventStore()
 
     struct CalendarEvent: Identifiable {
         let id: String
@@ -27,14 +31,17 @@ final class CalendarManager: ObservableObject {
     }
 
     func requestAccess() {
-        Task {
+        let store = eventStore
+        Task.detached {
             do {
-                let granted = try await store.requestFullAccessToEvents()
-                self.accessGranted = granted
-                if granted { self.fetchUpcoming() }
+                let granted = try await store.store.requestFullAccessToEvents()
+                await MainActor.run {
+                    self.accessGranted = granted
+                    if granted { self.fetchUpcoming() }
+                }
             } catch {
                 NSLog("Audite: calendar access error: \(error)")
-                self.accessGranted = false
+                await MainActor.run { self.accessGranted = false }
             }
         }
     }
@@ -42,6 +49,7 @@ final class CalendarManager: ObservableObject {
     func fetchUpcoming() {
         guard accessGranted else { return }
 
+        let store = eventStore.store
         let now = Date()
         let endOfDay = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: now)!
         let predicate = store.predicateForEvents(withStart: now.addingTimeInterval(-30 * 60), end: endOfDay, calendars: nil)
