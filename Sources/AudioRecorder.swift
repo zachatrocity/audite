@@ -4,6 +4,7 @@ import AVFoundation
 final class AudioRecorder {
     private let engine = AVAudioEngine()
     private var audioFile: AVAudioFile?
+    private var outputURL: URL?
     private var isRecording = false
 
     func startRecording() throws {
@@ -15,6 +16,7 @@ final class AudioRecorder {
         let outputURL = try makeOutputURL()
 
         audioFile = try AVAudioFile(forWriting: outputURL, settings: format.settings)
+        self.outputURL = outputURL
 
         inputNode.installTap(onBus: 0, bufferSize: 1024, format: format) { [weak self] buffer, _ in
             guard let self else { return }
@@ -30,12 +32,15 @@ final class AudioRecorder {
         isRecording = true
     }
 
-    func stopRecording() {
-        guard isRecording else { return }
+    func stopRecording() -> URL? {
+        guard isRecording else { return nil }
         engine.inputNode.removeTap(onBus: 0)
         engine.stop()
         audioFile = nil
         isRecording = false
+        let finishedURL = outputURL
+        outputURL = nil
+        return finishedURL
     }
 
     private func ensureMicrophoneAccess() throws {
