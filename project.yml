@@ -8,7 +8,7 @@ options:
 settings:
   base:
     PRODUCT_BUNDLE_IDENTIFIER: com.zachatrocity.audite
-    MARKETING_VERSION: 0.0.2
+    MARKETING_VERSION: 0.0.3
     CURRENT_PROJECT_VERSION: 1
     GENERATE_INFOPLIST_FILE: YES
     INFOPLIST_KEY_CFBundleDisplayName: Audite
