@@ -6,7 +6,7 @@ struct AudioDropZone: View {
     let onFileSelected: (URL) -> Void
     @State private var isTargeted = false
 
-    private static let supportedExtensions: Set<String> = ["caf", "mp3", "m4a", "wav", "aiff", "aif"]
+    private static nonisolated let supportedExtensions: Set<String> = ["caf", "mp3", "m4a", "wav", "aiff", "aif"]
 
     var body: some View {
         VStack(spacing: 8) {
