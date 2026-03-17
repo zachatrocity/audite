@@ -2,7 +2,7 @@ name: Audite
 options:
   bundleIdPrefix: com.zachatrocity
   deploymentTarget:
-    macOS: '13.0'
+    macOS: '14.0'
   xcodeVersion: '15.4'
   projectFormat: '15.4'
 settings:
@@ -14,11 +14,13 @@ settings:
     INFOPLIST_KEY_CFBundleDisplayName: Audite
     INFOPLIST_KEY_LSUIElement: YES
     INFOPLIST_KEY_NSMicrophoneUsageDescription: "Audite needs access to the microphone for recording."
-    INFOPLIST_KEY_NSSpeechRecognitionUsageDescription: "Audite uses speech recognition to transcribe recordings."
     INFOPLIST_KEY_NSCalendarsUsageDescription: "Audite can read Calendar events to name recordings."
-    SWIFT_VERSION: 5.0
+    SWIFT_VERSION: 6.0
 
-packages: {}
+packages:
+  FluidAudio:
+    url: https://github.com/FluidInference/FluidAudio.git
+    from: '0.12.4'
 
 targets:
   Audite:
@@ -26,8 +28,17 @@ targets:
     platform: macOS
     sources:
       - path: Sources
+    dependencies:
+      - package: FluidAudio
+    entitlements:
+      path: Sources/Audite.entitlements
+      properties:
+        com.apple.security.device.audio-input: true
     settings:
       base:
         INFOPLIST_KEY_NSHumanReadableCopyright: "Copyright © 2026 Zach"
+        CODE_SIGN_IDENTITY: "-"
+        CODE_SIGN_STYLE: Manual
+        ENABLE_HARDENED_RUNTIME: NO
     scheme:
       testTargets: []

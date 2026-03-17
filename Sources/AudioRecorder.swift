@@ -7,13 +7,13 @@ final class AudioRecorder {
     private var outputURL: URL?
     private var isRecording = false
 
-    func startRecording() throws {
+    func startRecording(title: String = "") throws {
         guard !isRecording else { return }
         try ensureMicrophoneAccess()
 
         let inputNode = engine.inputNode
         let format = inputNode.inputFormat(forBus: 0)
-        let outputURL = try makeOutputURL()
+        let outputURL = try makeOutputURL(title: title)
 
         audioFile = try AVAudioFile(forWriting: outputURL, settings: format.settings)
         self.outputURL = outputURL
@@ -61,17 +61,17 @@ final class AudioRecorder {
         }
     }
 
-    private func makeOutputURL() throws -> URL {
+    private func makeOutputURL(title: String) throws -> URL {
         let defaults = UserDefaults.standard
-        let outputFolder = defaults.string(forKey: "outputFolder") ?? ""
+        let audioFolder = defaults.string(forKey: "audioFolder") ?? ""
         let filenameTemplate = defaults.string(forKey: "filenameTemplate") ?? "{{date}} {{title}}"
 
         let baseURL: URL
-        if outputFolder.isEmpty {
+        if audioFolder.isEmpty {
             baseURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-                .appendingPathComponent("Audite", isDirectory: true)
+                .appendingPathComponent("Audite/Recordings", isDirectory: true)
         } else {
-            baseURL = URL(fileURLWithPath: outputFolder, isDirectory: true)
+            baseURL = URL(fileURLWithPath: audioFolder, isDirectory: true)
         }
 
         try FileManager.default.createDirectory(at: baseURL, withIntermediateDirectories: true)
@@ -82,7 +82,7 @@ final class AudioRecorder {
 
         var filename = filenameTemplate
             .replacingOccurrences(of: "{{date}}", with: dateString)
-            .replacingOccurrences(of: "{{title}}", with: "Recording")
+            .replacingOccurrences(of: "{{title}}", with: title.isEmpty ? "Recording" : title)
 
         filename = filename
             .replacingOccurrences(of: "/", with: "-")

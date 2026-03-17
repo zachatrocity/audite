@@ -1,64 +1,93 @@
 import Foundation
-import Speech
+import FluidAudio
 
-final class TranscriptionEngine {
-    private let recognizer = SFSpeechRecognizer()
+/// Wraps AsrManager so it can cross isolation boundaries.
+/// Safe because we only ever call transcribe sequentially from AppState.
+private final class SendableAsrManager: @unchecked Sendable {
+    let manager: AsrManager
+    init(_ manager: AsrManager) { self.manager = manager }
+}
 
-    func transcribeFile(at url: URL, completion: @escaping (Result<String, Error>) -> Void) {
-        requestSpeechAccess { [weak self] accessGranted in
-            guard let self else { return }
-            guard accessGranted else {
-                completion(.failure(TranscriptionError.permissionDenied))
-                return
-            }
+@MainActor
+final class TranscriptionEngine: ObservableObject {
+    @Published var modelState: ModelState = .notDownloaded
+    @Published var downloadProgress: Double = 0
 
-            guard let recognizer = self.recognizer, recognizer.isAvailable else {
-                completion(.failure(TranscriptionError.recognizerUnavailable))
-                return
-            }
+    private var asrManager: SendableAsrManager?
+    private var models: AsrModels?
 
-            let request = SFSpeechURLRecognitionRequest(url: url)
-            request.shouldReportPartialResults = false
-
-            recognizer.recognitionTask(with: request) { result, error in
-                if let error {
-                    completion(.failure(error))
-                    return
-                }
-
-                if let result, result.isFinal {
-                    completion(.success(result.bestTranscription.formattedString))
-                }
-            }
-        }
-    }
-
-    private func requestSpeechAccess(completion: @escaping (Bool) -> Void) {
-        switch SFSpeechRecognizer.authorizationStatus() {
-        case .authorized:
-            completion(true)
-        case .denied, .restricted:
-            completion(false)
-        case .notDetermined:
-            SFSpeechRecognizer.requestAuthorization { status in
-                completion(status == .authorized)
-            }
-        @unknown default:
-            completion(false)
-        }
+    enum ModelState: Equatable {
+        case notDownloaded
+        case downloading
+        case ready
+        case error(String)
     }
 
     enum TranscriptionError: LocalizedError {
-        case permissionDenied
-        case recognizerUnavailable
+        case modelNotReady
+        case transcriptionFailed(String)
 
         var errorDescription: String? {
             switch self {
-            case .permissionDenied:
-                return "Speech recognition permission not granted"
-            case .recognizerUnavailable:
-                return "Speech recognizer is unavailable"
+            case .modelNotReady:
+                return "Transcription model not downloaded. Open Settings to download."
+            case .transcriptionFailed(let msg):
+                return "Transcription failed: \(msg)"
             }
         }
+    }
+
+    func downloadModel() {
+        guard modelState != .downloading else { return }
+        modelState = .downloading
+        downloadProgress = 0
+
+        Task {
+            do {
+                let loadedModels = try await AsrModels.downloadAndLoad(version: .v3)
+                self.models = loadedModels
+
+                let manager = AsrManager(config: .default)
+                try await manager.initialize(models: loadedModels)
+                self.asrManager = SendableAsrManager(manager)
+
+                self.modelState = .ready
+                self.downloadProgress = 1.0
+                NSLog("Audite: model downloaded and ready")
+            } catch {
+                self.modelState = .error(error.localizedDescription)
+                NSLog("Audite: model download failed: \(error)")
+            }
+        }
+    }
+
+    func loadModelIfCached() {
+        Task {
+            do {
+                let loadedModels = try await AsrModels.downloadAndLoad(version: .v3)
+                self.models = loadedModels
+
+                let manager = AsrManager(config: .default)
+                try await manager.initialize(models: loadedModels)
+                self.asrManager = SendableAsrManager(manager)
+
+                self.modelState = .ready
+                NSLog("Audite: model loaded from cache")
+            } catch {
+                self.modelState = .notDownloaded
+            }
+        }
+    }
+
+    func transcribeFile(at url: URL) async throws -> String {
+        guard let wrapper = asrManager else {
+            throw TranscriptionError.modelNotReady
+        }
+
+        let result = try await Task.detached {
+            try await wrapper.manager.transcribe(url, source: .system)
+        }.value
+
+        return result.text
     }
 }

@@ -1,9 +1,12 @@
 import Cocoa
 import SwiftUI
+import Combine
 
+@MainActor
 final class StatusBarController {
     private let statusItem: NSStatusItem
     private let popover: NSPopover
+    private var cancellables: Set<AnyCancellable> = []
 
     init(_ appState: AppState) {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
@@ -15,9 +18,17 @@ final class StatusBarController {
             button.target = self
         }
 
-        popover.contentSize = NSSize(width: 320, height: 220)
+        popover.contentSize = NSSize(width: 320, height: 280)
         popover.behavior = .transient
         popover.contentViewController = NSHostingController(rootView: PopoverView().environmentObject(appState))
+
+        appState.$isRecording.sink { [weak self] isRecording in
+            guard let self else { return }
+            let name = isRecording ? "record.circle.fill" : "waveform.circle"
+            self.statusItem.button?.image = NSImage(systemSymbolName: name, accessibilityDescription: "Audite")
+            // Keep popover open while recording so user can stop
+            self.popover.behavior = isRecording ? .applicationDefined : .transient
+        }.store(in: &cancellables)
     }
 
     @objc private func togglePopover(_ sender: Any?) {

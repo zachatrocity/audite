@@ -34,6 +34,9 @@ jobs:
             -scheme Audite \
             -configuration Release \
             -derivedDataPath build \
+            CODE_SIGN_IDENTITY="-" \
+            CODE_SIGN_STYLE=Manual \
+            ENABLE_HARDENED_RUNTIME=NO \
             build
 
       - name: Zip .app
