@@ -1,0 +1,30 @@
+name: Audite
+options:
+  bundleIdPrefix: com.zachatrocity
+  deploymentTarget:
+    macOS: '13.0'
+  xcodeVersion: '15.4'
+  projectFormat: '15.4'
+settings:
+  base:
+    PRODUCT_BUNDLE_IDENTIFIER: com.zachatrocity.audite
+    MARKETING_VERSION: 0.1.0
+    CURRENT_PROJECT_VERSION: 1
+    GENERATE_INFOPLIST_FILE: YES
+    INFOPLIST_KEY_CFBundleDisplayName: Audite
+    INFOPLIST_KEY_LSUIElement: YES
+    SWIFT_VERSION: 5.0
+
+packages: {}
+
+targets:
+  Audite:
+    type: application
+    platform: macOS
+    sources:
+      - path: Sources
+    settings:
+      base:
+        INFOPLIST_KEY_NSHumanReadableCopyright: "Copyright © 2026 Zach"
+    scheme:
+      testTargets: []

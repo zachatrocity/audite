@@ -1,0 +1,54 @@
+name: build-macos
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ "v*" ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select latest Xcode
+        run: |
+          XCODE_APP=$(ls /Applications | grep -E '^Xcode_.*\.app$' | sort -V | tail -1)
+          echo "Using $XCODE_APP"
+          sudo xcode-select -s "/Applications/$XCODE_APP/Contents/Developer"
+
+      - name: Install XcodeGen
+      # XcodeGen is required to generate the .xcodeproj from project.yml
+        run: brew install xcodegen
+
+      - name: Generate Xcode Project
+        run: |
+          rm -rf Audite.xcodeproj
+          xcodegen generate
+
+      - name: Build (Release)
+        run: |
+          xcodebuild \
+            -scheme Audite \
+            -configuration Release \
+            -derivedDataPath build \
+            build
+
+      - name: Zip .app
+        run: |
+          cd build/Build/Products/Release
+          ditto -c -k --sequesterRsrc --keepParent Audite.app Audite.zip
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Audite-macOS
+          path: build/Build/Products/Release/Audite.zip
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/Build/Products/Release/Audite.zip
