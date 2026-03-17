@@ -11,5 +11,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         statusBar = StatusBarController(appState)
         appState.transcription.loadModelIfCached()
         appState.calendar.requestAccess()
+        appState.updateChecker.check()
     }
 }

@@ -11,6 +11,10 @@ struct SettingsView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
+                if appState.updateChecker.updateAvailable {
+                    updateSection
+                    Divider()
+                }
                 modelSection
                 Divider()
                 audioFolderSection
@@ -18,6 +22,27 @@ struct SettingsView: View {
                 obsidianFolderSection
                 Divider()
                 filenameSection
+            }
+        }
+    }
+
+    // MARK: - Update
+
+    @ViewBuilder
+    private var updateSection: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "arrow.up.circle.fill")
+                .foregroundColor(.blue)
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Update available: v\(appState.updateChecker.latestVersion ?? "")")
+                    .font(.caption.bold())
+            }
+            Spacer()
+            if let url = appState.updateChecker.downloadURL {
+                Button("Download") {
+                    NSWorkspace.shared.open(url)
+                }
+                .controlSize(.small)
             }
         }
     }

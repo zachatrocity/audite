@@ -14,6 +14,7 @@ final class AppState: ObservableObject {
 
     let transcription = TranscriptionEngine()
     let calendar = CalendarManager()
+    let updateChecker = UpdateChecker()
     private let recorder = AudioRecorder()
 
     func toggleRecording() {
