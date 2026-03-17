@@ -12,6 +12,10 @@ _None known — file issues as they come up._
 - [ ] **Live transcription** — stream text during recording using FluidAudio's streaming ASR
 
 ### Later
+- [ ] **Meeting detection** — auto-detect when a meeting starts (calendar event begins, conferencing app opens) and prompt to record
+- [ ] **Muted audio capture** — capture system/app audio when your mic is muted (e.g. joined a call from a conference room but listening on your laptop)
+- [ ] **Import existing recordings** — drag-and-drop or file picker to transcribe pre-recorded audio files (Copilot exports, Zoom recordings, etc.)
+- [ ] **Live transcription** _(experimental)_ — stream text during recording using FluidAudio's streaming ASR (Parakeet EOU, English-only)
 - [ ] **Export formats** — SRT subtitles, plain text alongside Markdown
 - [ ] **Obsidian link in frontmatter** — backlink to related daily note
 - [ ] **Model selection** — choose between Parakeet v2 (English-only, higher accuracy) and v3 (multilingual)

@@ -26,9 +26,18 @@ final class StatusBarController {
             guard let self else { return }
             let name = isRecording ? "record.circle.fill" : "waveform.circle"
             self.statusItem.button?.image = NSImage(systemSymbolName: name, accessibilityDescription: "Audite")
-            // Keep popover open while recording so user can stop
-            self.popover.behavior = isRecording ? .applicationDefined : .transient
+            self.updatePopoverBehavior(appState)
         }.store(in: &cancellables)
+
+        appState.$showingSettings.sink { [weak self] _ in
+            guard let self else { return }
+            self.updatePopoverBehavior(appState)
+        }.store(in: &cancellables)
+    }
+
+    private func updatePopoverBehavior(_ appState: AppState) {
+        let pinOpen = appState.isRecording || appState.showingSettings
+        popover.behavior = pinOpen ? .applicationDefined : .transient
     }
 
     @objc private func togglePopover(_ sender: Any?) {

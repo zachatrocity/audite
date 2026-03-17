@@ -10,6 +10,7 @@ final class AppState: ObservableObject {
     @Published var lastSavedURL: URL?
     @Published var recordingStartDate: Date?
     @Published var meetingTitle: String = ""
+    @Published var showingSettings: Bool = false
 
     let transcription = TranscriptionEngine()
     let calendar = CalendarManager()

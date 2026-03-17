@@ -1,6 +1,20 @@
-# Audite
+<p align="center">
+  <img src="assets/logo.png" alt="Audite" width="128" />
+</p>
 
-A macOS menu-bar app that records meetings and transcribes them locally into Markdown notes for Obsidian.
+<h1 align="center">Audite</h1>
+
+<p align="center">
+  A macOS menu-bar app that records meetings and transcribes them locally into Markdown notes for Obsidian.
+</p>
+
+---
+
+## Screenshots
+
+| | |
+|---|---|
+| ![Screenshot 1](assets/screenshot-1.jpg) | ![Screenshot 2](assets/screenshot-2.jpg) |
 
 ## Features
 

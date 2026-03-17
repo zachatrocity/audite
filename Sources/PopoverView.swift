@@ -2,14 +2,13 @@ import SwiftUI
 
 struct PopoverView: View {
     @EnvironmentObject var appState: AppState
-    @State private var showingSettings = false
     @State private var elapsed: TimeInterval = 0
     @AppStorage("prependDate") private var prependDate: Bool = true
     private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
     var body: some View {
         VStack(spacing: 12) {
-            if showingSettings {
+            if appState.showingSettings {
                 settingsContent
             } else {
                 mainContent
@@ -18,9 +17,9 @@ struct PopoverView: View {
             Divider()
 
             HStack {
-                Button(showingSettings ? "Back" : "Settings") {
+                Button(appState.showingSettings ? "Back" : "Settings") {
                     withAnimation(.easeInOut(duration: 0.15)) {
-                        showingSettings.toggle()
+                        appState.showingSettings.toggle()
                     }
                 }
                 .buttonStyle(.link)
@@ -153,7 +152,7 @@ struct PopoverView: View {
                     .font(.caption)
                 Button("Settings") {
                     withAnimation(.easeInOut(duration: 0.15)) {
-                        showingSettings = true
+                        appState.showingSettings = true
                     }
                 }
                 .font(.caption)

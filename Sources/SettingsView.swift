@@ -165,8 +165,12 @@ struct SettingsView: View {
         panel.allowsMultipleSelection = false
         panel.prompt = "Choose"
 
-        if panel.runModal() == .OK {
-            completion(panel.url?.path ?? "")
+        // Detach from popover so the panel gets full focus
+        NSApp.activate(ignoringOtherApps: true)
+        panel.begin { response in
+            if response == .OK {
+                completion(panel.url?.path ?? "")
+            }
         }
     }
 
