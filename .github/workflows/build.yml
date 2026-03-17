@@ -35,6 +35,7 @@ jobs:
 
       - name: Build (Release)
         run: |
+          set -o pipefail
           xcodebuild \
             -scheme Audite \
             -configuration Release \
@@ -42,7 +43,11 @@ jobs:
             CODE_SIGN_IDENTITY="-" \
             CODE_SIGN_STYLE=Manual \
             ENABLE_HARDENED_RUNTIME=NO \
-            build
+            build 2>&1 | tee build.log
+
+      - name: Show build errors
+        if: failure()
+        run: grep -A2 "error:" build.log | head -60
 
       - name: Zip .app
         run: |
