@@ -10,6 +10,8 @@ struct PopoverView: View {
         VStack(spacing: 12) {
             if appState.showingSettings {
                 settingsContent
+            } else if appState.showingUpload {
+                uploadContent
             } else {
                 mainContent
             }
@@ -17,13 +19,32 @@ struct PopoverView: View {
             Divider()
 
             HStack {
-                Button(appState.showingSettings ? "Back" : "Settings") {
-                    withAnimation(.easeInOut(duration: 0.15)) {
-                        appState.showingSettings.toggle()
+                if appState.showingSettings || appState.showingUpload {
+                    Button("Back") {
+                        withAnimation(.easeInOut(duration: 0.15)) {
+                            appState.showingSettings = false
+                            appState.showingUpload = false
+                        }
                     }
+                    .buttonStyle(.link)
+                    .font(.caption)
+                } else {
+                    Button("Settings") {
+                        withAnimation(.easeInOut(duration: 0.15)) {
+                            appState.showingSettings = true
+                        }
+                    }
+                    .buttonStyle(.link)
+                    .font(.caption)
+
+                    Button("Upload") {
+                        withAnimation(.easeInOut(duration: 0.15)) {
+                            appState.showingUpload = true
+                        }
+                    }
+                    .buttonStyle(.link)
+                    .font(.caption)
                 }
-                .buttonStyle(.link)
-                .font(.caption)
 
                 Spacer()
 
@@ -217,6 +238,29 @@ struct PopoverView: View {
         .disabled(appState.isTranscribing || appState.transcription.modelState != .ready)
         } // VStack
         } // ScrollView
+    }
+
+    // MARK: - Upload
+
+    @ViewBuilder
+    private var uploadContent: some View {
+        VStack(spacing: 12) {
+            Text("Transcribe Audio File")
+                .font(.headline)
+
+            TextField("Meeting name (optional)", text: $appState.meetingTitle)
+                .textFieldStyle(.roundedBorder)
+                .controlSize(.small)
+
+            AudioDropZone { url in
+                appState.showingUpload = false
+                appState.transcribeUploadedFile(url)
+            }
+
+            Text("Supports .caf, .mp3, .m4a, .wav")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+        }
     }
 
     // MARK: - Settings

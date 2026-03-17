@@ -41,10 +41,15 @@ final class StatusBarController {
             guard let self else { return }
             self.updatePopoverBehavior(appState)
         }.store(in: &cancellables)
+
+        appState.$showingUpload.sink { [weak self] _ in
+            guard let self else { return }
+            self.updatePopoverBehavior(appState)
+        }.store(in: &cancellables)
     }
 
     private func updatePopoverBehavior(_ appState: AppState) {
-        let pinOpen = appState.isRecording || appState.showingSettings
+        let pinOpen = appState.isRecording || appState.showingSettings || appState.showingUpload
         popover.behavior = pinOpen ? .applicationDefined : .transient
     }
 

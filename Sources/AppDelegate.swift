@@ -10,6 +10,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         guard statusBar == nil else { return }
         statusBar = StatusBarController(appState)
         appState.transcription.loadModelIfCached()
+        appState.transcription.loadDiarizationModelIfCached()
         appState.calendar.requestAccess()
         appState.updateChecker.check()
     }

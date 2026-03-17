@@ -11,6 +11,7 @@ final class AppState: ObservableObject {
     @Published var recordingStartDate: Date?
     @Published var meetingTitle: String = ""
     @Published var showingSettings: Bool = false
+    @Published var showingUpload: Bool = false
 
     let transcription = TranscriptionEngine()
     let calendar = CalendarManager()
@@ -38,6 +39,15 @@ final class AppState: ObservableObject {
             isRecording = false
             NSLog("Audite: failed to start recording: \(error)")
         }
+    }
+
+    func transcribeUploadedFile(_ url: URL) {
+        guard !isTranscribing else { return }
+        // Use the file's name (without extension) as the meeting title if none is set
+        if meetingTitle.isEmpty {
+            meetingTitle = url.deletingPathExtension().lastPathComponent
+        }
+        startTranscriptionIfNeeded(url)
     }
 
     private func startTranscriptionIfNeeded(_ url: URL?) {

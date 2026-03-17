@@ -1,27 +1,15 @@
-# Audite — First Release
+# Audite v0.0.5
 
-A macOS menu-bar app that records meetings and transcribes them locally into Markdown notes for Obsidian.
+## New Features
 
-## Features
+- **File upload for pre-recorded meetings** — Upload .caf, .mp3, .m4a, or .wav files via drag & drop or file picker to transcribe existing recordings
+- **Paragraph formatting** — Transcriptions are now broken into readable paragraphs using pause detection and sentence grouping, instead of a wall of text
+- **Experimental speaker detection** — Optional speaker diarization powered by FluidAudio's offline pipeline. Identifies who said what in multi-speaker meetings. Disabled by default — enable in Settings (requires additional model download)
+- **Update checker** — Settings now shows a notification when a newer version is available on GitHub
+- **Clear button** — Dismiss the last recording result with a single click
+- **Filename improvements** — Fixed double-date issue with "Prepend date", removed confusing time digits from default filenames, added "Include time" toggle
 
-- **Fully local transcription** — powered by [FluidAudio](https://github.com/FluidInference/FluidAudio) (Parakeet TDT v3) running on Apple Neural Engine. No audio ever leaves your machine.
-- **Menu-bar native** — lives in the status bar with a recording indicator, right-click to quit
-- **Obsidian integration** — transcripts saved as `.md` files with YAML frontmatter directly into your vault
-- **Apple Calendar integration** — upcoming meetings shown in the popover, click to use as the recording title
-- **Prepend date toggle** — useful for recurring meetings (e.g. `2026-03-17 Weekly Standup`)
-- **Configurable output** — separate folders for audio recordings and transcript notes, customizable filename templates with `{{date}}` and `{{title}}` tokens
-- **Custom app icon**
+## Bug Fixes
 
-## Requirements
-
-- macOS 14.0+
-- Apple Silicon (M1+) recommended
-- ~1 GB disk space for the transcription model (downloaded on first use)
-
-## Getting Started
-
-1. Download and unzip `Audite.zip`
-2. Move `Audite.app` to Applications
-3. If macOS blocks it: right-click → Open, or run `xattr -cr Audite.app`
-4. Click the waveform icon in the menu bar → Settings → Download the transcription model
-5. Set your output folders and start recording
+- Fixed settings pane getting cut off in the popover
+- Main view and settings now scroll when content exceeds popover height

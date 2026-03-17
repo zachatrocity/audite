@@ -7,6 +7,7 @@ struct SettingsView: View {
     @AppStorage("outputFolder") private var outputFolder: String = ""
     @AppStorage("filenameTemplate") private var filenameTemplate: String = "{{date}} {{title}}"
     @AppStorage("includeTime") private var includeTime: Bool = false
+    @AppStorage("speakerDetection") private var speakerDetection: Bool = false
 
     var body: some View {
         ScrollView {
@@ -16,6 +17,8 @@ struct SettingsView: View {
                     Divider()
                 }
                 modelSection
+                Divider()
+                diarizationSection
                 Divider()
                 audioFolderSection
                 Divider()
@@ -97,6 +100,76 @@ struct SettingsView: View {
             }
 
             Text("Runs fully on-device via Apple Neural Engine. ~1 GB download.")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+        }
+    }
+
+    // MARK: - Diarization
+
+    @ViewBuilder
+    private var diarizationSection: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack {
+                Text("Speaker Detection")
+                    .font(.caption.bold())
+                Text("Experimental")
+                    .font(.caption2)
+                    .foregroundColor(.orange)
+                    .padding(.horizontal, 4)
+                    .padding(.vertical, 1)
+                    .background(Color.orange.opacity(0.1))
+                    .cornerRadius(3)
+            }
+
+            Toggle("Enable speaker detection", isOn: $speakerDetection)
+                .toggleStyle(.checkbox)
+                .font(.caption)
+
+            if speakerDetection {
+                HStack(spacing: 8) {
+                    switch appState.transcription.diarizationState {
+                    case .notDownloaded:
+                        Circle().fill(.orange).frame(width: 6, height: 6)
+                        Text("Models not downloaded")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        Spacer()
+                        Button("Download") {
+                            appState.transcription.downloadDiarizationModel()
+                        }
+                        .controlSize(.small)
+
+                    case .downloading:
+                        ProgressView()
+                            .controlSize(.small)
+                        Text("Downloading models...")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        Spacer()
+
+                    case .ready:
+                        Circle().fill(.green).frame(width: 6, height: 6)
+                        Text("Models ready")
+                            .font(.caption)
+                        Spacer()
+
+                    case .error(let msg):
+                        Circle().fill(.red).frame(width: 6, height: 6)
+                        Text(msg)
+                            .font(.caption)
+                            .foregroundColor(.red)
+                            .lineLimit(2)
+                        Spacer()
+                        Button("Retry") {
+                            appState.transcription.downloadDiarizationModel()
+                        }
+                        .controlSize(.small)
+                    }
+                }
+            }
+
+            Text("Identifies speakers in transcripts. Requires additional model download.")
                 .font(.caption2)
                 .foregroundColor(.secondary)
         }
