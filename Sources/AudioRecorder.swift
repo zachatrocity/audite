@@ -36,6 +36,7 @@ final class AudioRecorder {
         guard isRecording else { return nil }
         engine.inputNode.removeTap(onBus: 0)
         engine.stop()
+        engine.reset()
         audioFile = nil
         isRecording = false
         let finishedURL = outputURL
